@@ -32,6 +32,7 @@
 package com.aerosimo.ominet.astrology.dao.impl;
 
 import com.aerosimo.ominet.astrology.core.config.Connect;
+import com.aerosimo.ominet.astrology.models.utils.Spectre;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,19 +43,15 @@ import java.sql.Types;
 public class Horoscope {
     private static final Logger log = LogManager.getLogger(Horoscope.class.getName());
 
-    static String response;
-    static String sql;
-    static Connection con;
-    static {
-        con = Connect.dbase();
+    private Horoscope() {
+        // utility class
     }
-    static CallableStatement stmt;
 
     public static String saveHoroscope(String zodiac, String currentDay, String narrative) {
         log.info("Preparing to save new daily horoscope...");
-        sql = "{call profile_pkg.SaveHoroscope(?,?,?,?,?)}";
-            try {
-                stmt = con.prepareCall(sql);
+        String response;
+        String sql = "{call profile_pkg.SaveHoroscope(?,?,?,?,?)}";
+            try (Connection con = Connect.dbase(); CallableStatement stmt = con.prepareCall(sql)) {
                 stmt.setString(1, zodiac);
                 stmt.setString(2, currentDay);
                 stmt.setString(3, narrative);
@@ -66,6 +63,11 @@ public class Horoscope {
             }catch(Exception err){
                 response = "Fail";
                 log.error("Horoscope service failed with adaptor error {}", String.valueOf(err));
+                try {
+                    Spectre.recordError("AS-20008", err.getMessage(), Horoscope.class.getName());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         return response;
     }
