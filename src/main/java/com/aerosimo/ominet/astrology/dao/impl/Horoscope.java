@@ -43,32 +43,32 @@ import java.sql.Types;
 public class Horoscope {
     private static final Logger log = LogManager.getLogger(Horoscope.class.getName());
 
-    private Horoscope() {
-        // utility class
-    }
-
     public static String saveHoroscope(String zodiac, String currentDay, String narrative) {
         log.info("Preparing to save new daily horoscope...");
         String response;
         String sql = "{call profile_pkg.SaveHoroscope(?,?,?,?,?)}";
-            try (Connection con = Connect.dbase(); CallableStatement stmt = con.prepareCall(sql)) {
-                stmt.setString(1, zodiac);
-                stmt.setString(2, currentDay);
-                stmt.setString(3, narrative);
-                stmt.setString(4, "Vercel");
-                stmt.registerOutParameter(5, Types.VARCHAR);
-                stmt.execute();
-                response = stmt.getString(5);
-                log.info("Successfully write {} daily horoscope update from Vercel to database", zodiac);
-            }catch(Exception err){
-                response = "Fail";
-                log.error("Horoscope service failed with adaptor error {}", String.valueOf(err));
-                try {
-                    Spectre.recordError("AS-20008", err.getMessage(), Horoscope.class.getName());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+        Connection con;
+        CallableStatement stmt;
+        try {
+            con = Connect.dbase();
+            stmt = con.prepareCall(sql);
+            stmt.setString(1, zodiac);
+            stmt.setString(2, currentDay);
+            stmt.setString(3, narrative);
+            stmt.setString(4, "Vercel");
+            stmt.registerOutParameter(5, Types.VARCHAR);
+            stmt.execute();
+            response = stmt.getString(5);
+            log.info("Successfully write {} daily horoscope update from Vercel to database", zodiac);
+        } catch (Exception err) {
+            response = "Fail";
+            log.error("Horoscope service failed with adaptor error {}", String.valueOf(err));
+            try {
+                Spectre.recordError("AS-20008", err.getMessage(), Horoscope.class.getName());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
+        }
         return response;
     }
 }
