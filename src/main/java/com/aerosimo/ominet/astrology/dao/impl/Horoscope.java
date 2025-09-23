@@ -38,6 +38,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Types;
 
 public class Horoscope {
@@ -47,8 +48,8 @@ public class Horoscope {
         log.info("Preparing to save new daily horoscope...");
         String response;
         String sql = "{call profile_pkg.SaveHoroscope(?,?,?,?,?)}";
-        Connection con;
-        CallableStatement stmt;
+        Connection con = null;
+        CallableStatement stmt = null;
         try {
             con = Connect.dbase();
             stmt = con.prepareCall(sql);
@@ -60,7 +61,7 @@ public class Horoscope {
             stmt.execute();
             response = stmt.getString(5);
             log.info("Successfully write {} daily horoscope update from Vercel to database", zodiac);
-        } catch (Exception err) {
+        } catch (SQLException err) {
             response = "Fail";
             log.error("Horoscope service failed with adaptor error {}", String.valueOf(err));
             try {
@@ -68,6 +69,15 @@ public class Horoscope {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        } finally {
+            // Close the statement and connection
+            try {
+                stmt.close();
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            log.info("DB Connection for (saveHoroscope) Closed....");
         }
         return response;
     }

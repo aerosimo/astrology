@@ -46,16 +46,14 @@ public class Connect {
 
     public static Connection dbase() {
         log.debug("Fetching a new connection from Oracle DataSource");
-        InitialContext ctx;
-        DataSource ds;
         Connection con = null;
-        try {
+        try{
             log.info("Looking up JNDI DataSource for Oracle DB");
-            ctx = new InitialContext();
-            ds = (DataSource) ctx.lookup("java:comp/env/jdbc/hats");
+            InitialContext ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/hats");
             con = ds.getConnection();
-            log.info("DataSource lookup successful");
-        } catch(NamingException | SQLException err) {
+            log.info("Connection Established successfully");
+        } catch (NamingException | SQLException err) {
             log.error("JNDI lookup for Oracle DB failed", err);
         }
         return con;
