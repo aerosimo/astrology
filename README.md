@@ -68,6 +68,7 @@ The required dependencies are defined in `pom.xml`. Below are the key dependenci
 
 - **Jakarta EE 10 API**: Provides JAX-WS support.
 - **JAX-WS**: For SOAP web service implementation.
+- **JAX-RS**: For REST web service implementation.
 
 ### Building and Running the Application
 
@@ -104,14 +105,13 @@ The required dependencies are defined in `pom.xml`. Below are the key dependenci
 
 The SOAP web service is implemented in `com.aerosimo.ominet.astrology.api.soap.AstrologySOAP.java`.
 
-Example sendMail SOAP Request:
+Example dailyHoroscope SOAP Request:
 ```xml
-<?xml version='1.0' encoding='UTF-8'?>
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ast="https://aerosimo.com/api/ws/astrology">
-    <soap:Header/>
-    <soap:Body>
-        <ast:sendEmail />
-    </soap:Body>
+   <soap:Header/>
+   <soap:Body>
+      <ast:dailyHoroscope/>
+   </soap:Body>
 </soap:Envelope>
 ```
 ### 2. **REST Web Service** (JAX-RS)
@@ -123,7 +123,7 @@ Example horoscope REST Request:
 POST http://localhost:8081/astrology/api/astrology/horoscope
 
 ```
-Example sendMail REST Response:
+Example dailyHoroscope REST Response:
 ```json
     {
       "status": "success",
