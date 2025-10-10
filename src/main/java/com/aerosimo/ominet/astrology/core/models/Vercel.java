@@ -83,10 +83,20 @@ public class Vercel {
                     log.info("Successfully updated horoscope for {}. Today: {}", sign, currentDay);
                 } else {
                     log.error("Failed to fetch data for {}. HTTP Code: {}", sign, responseCode);
+                    try {
+                        Spectre.recordError("TE-20003", "Failed to fetch data for " + sign + "HTTP Code: " + responseCode, Vercel.class.getName());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 conn.disconnect();
             } catch (Exception err) {
                 log.error("Horoscope service failed with adaptor error {}", String.valueOf(err));
+                try {
+                    Spectre.recordError("TE-20004", "Horoscope service failed with adaptor error " + err, Vercel.class.getName());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

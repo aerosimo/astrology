@@ -31,6 +31,7 @@
 
 package com.aerosimo.ominet.astrology.api.rest;
 
+import com.aerosimo.ominet.astrology.core.models.Spectre;
 import com.aerosimo.ominet.astrology.core.models.Vercel;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -63,11 +64,16 @@ public class AstrologyREST {
             // Return simple JSON confirmation
             String jsonResponse = "{\"status\":\"success\",\"message\":\"Daily horoscope update initiated.\"}";
             return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
-        } catch (Exception e) {
-            log.error("❌ Error while updating horoscope: {}", e.getMessage(), e);
+        } catch (Exception err) {
+            log.error("❌ Error while updating horoscope: {}", err.getMessage(), err);
+            try {
+                Spectre.recordError("TE-20005", "❌ Error while updating horoscope " + err.getMessage(), Vercel.class.getName());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             String errorResponse = String.format(
                     "{\"status\":\"error\",\"message\":\"%s\"}",
-                    e.getMessage().replace("\"", "'"));
+                    err.getMessage().replace("\"", "'"));
             return Response.serverError()
                     .entity(errorResponse)
                     .type(MediaType.APPLICATION_JSON)
