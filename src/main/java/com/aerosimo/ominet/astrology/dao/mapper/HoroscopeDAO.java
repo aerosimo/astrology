@@ -48,7 +48,7 @@ public class HoroscopeDAO {
     public static String saveHoroscope(String zodiac, String currentDay, String narrative) {
         log.info("Preparing to save new daily horoscope...");
         String response;
-        String sql = "{call profile_pkg.SaveHoroscope(?,?,?,?,?)}";
+        String sql = "{call profile_pkg.saveHoroscope(?,?,?,?,?)}";
         Connection con = null;
         CallableStatement stmt = null;
         try {
