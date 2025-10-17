@@ -1,4 +1,4 @@
-![MIT License](/img/MIT.png "MIT")
+![MIT License](/src/main/webapp/assets/img/MIT.png "MIT")
 
 <details>
   <summary>License</summary>
@@ -34,7 +34,7 @@ Any reliance you place on such information is therefore strictly at your own ris
 
 ---
 
-![Project Cover](/img/cover.jpg "Astrology")
+![Project Cover](/src/main/webapp/assets/img/cover.jpg "Astrology")
 # Astrology
 > *Astrology is a range of divinatory practices, recognized as pseudo-scientific since the 18th century,
 that propose that information about human affairs and terrestrial events may be discerned by studying the
@@ -52,7 +52,7 @@ This `README.md` gives an overview of the project structure and instructions on 
 
 ## Getting Started
 
-![Project Codes & Tasks](/img/code.jpg "Project Codes and Task")
+![Project Codes & Tasks](/src/main/webapp/assets/img/code.jpg "Project Codes and Task")
 
 ---
 
@@ -95,8 +95,8 @@ The required dependencies are defined in `pom.xml`. Below are the key dependenci
 
    Start server and access the application:
 
-    - SOAP Service: WSDL at `http://localhost:8081/astrology/ws/astrology?wsdl`
-    - REST Service: http://localhost:8081/astrology/api/astrology/horoscope
+    - SOAP Service: WSDL at `http://localhost:8081/astrology/ws/horoscope?wsdl`
+    - REST Service: http://localhost:8081/astrology/api/horoscope
     - Web Interface: `http://localhost:8081/astrology/index.jsp`
 
 ## Detailed Explanation of Components
@@ -120,7 +120,7 @@ The REST web service is implemented in `com.aerosimo.ominet.astrology.api.rest.A
 
 Example horoscope REST Request:
 ```curl
-POST http://localhost:8081/astrology/api/astrology/horoscope
+POST http://localhost:8081/astrology/api/horoscope
 
 ```
 Example dailyHoroscope REST Response:
@@ -138,4 +138,4 @@ We welcome feedback and contributions. Please open an issue or submit a pull req
 
 ```
 
-![Aerosimo Logo](/img/logo.png "Aerosimo")
+![Aerosimo Logo](/src/main/webapp/assets/img/logo.png "Aerosimo")

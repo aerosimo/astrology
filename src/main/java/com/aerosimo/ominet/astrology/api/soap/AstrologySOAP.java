@@ -39,8 +39,11 @@ import jakarta.xml.ws.soap.SOAPBinding;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@WebService(name = "astrology", serviceName = "astrology",
-        portName = "astrologyPort", targetNamespace = "https://aerosimo.com/api/ws/astrology")
+@WebService(
+        name = "AstrologyService",
+        serviceName = "AstrologyService",
+        portName = "AstrologyPort",
+        targetNamespace = "https://aerosimo.com/ws")
 @BindingType(SOAPBinding.SOAP12HTTP_BINDING)
 public class AstrologySOAP {
 

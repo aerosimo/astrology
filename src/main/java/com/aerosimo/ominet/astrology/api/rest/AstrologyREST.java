@@ -44,7 +44,8 @@ import org.apache.logging.log4j.Logger;
 /**
  * REST endpoint to trigger horoscope update from Vercel API.
  */
-@Path("/astrology")
+@Path("/horoscope")
+@Produces(MediaType.APPLICATION_JSON)
 public class AstrologyREST {
 
     private static final Logger log = LogManager.getLogger(AstrologyREST.class.getName());
@@ -54,8 +55,6 @@ public class AstrologyREST {
      * Accessible via POST /api/astrology/horoscope
      */
     @POST
-    @Path("/horoscope")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getHoroscope() {
         try{
             Vercel.updateZodiac();
