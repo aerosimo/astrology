@@ -2,9 +2,9 @@
  * This piece of work is to enhance astrology project functionality.          *
  *                                                                            *
  * Author:    eomisore                                                        *
- * File:      HoroscopeDAO.java                                               *
- * Created:   09/10/2025, 15:14                                               *
- * Modified:  09/10/2025, 15:14                                               *
+ * File:      Connect.java                                                    *
+ * Created:   09/10/2025, 15:10                                               *
+ * Modified:  27/11/2025, 22:02                                               *
  *                                                                            *
  * Copyright (c)  2025.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,57 +29,33 @@
  *                                                                            *
  ******************************************************************************/
 
-package com.aerosimo.ominet.astrology.dao.mapper;
+package com.aerosimo.ominet.core.config;
 
-import com.aerosimo.ominet.astrology.core.config.Connect;
-import com.aerosimo.ominet.astrology.core.models.Spectre;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.CallableStatement;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Types;
 
-public class HoroscopeDAO {
+public class Connect {
 
-    private static final Logger log = LogManager.getLogger(HoroscopeDAO.class.getName());
+    private static final Logger log = LogManager.getLogger(Connect.class.getName());
 
-    public static String saveHoroscope(String zodiac, String currentDay, String narrative) {
-        log.info("Preparing to save new daily horoscope...");
-        String response;
-        String sql = "{call starcast_pkg.saveHoroscope(?,?,?,?,?)}";
+    public static Connection dbase() {
+        log.debug("Fetching a new connection from Oracle DataSource");
         Connection con = null;
-        CallableStatement stmt = null;
-        try {
-            con = Connect.dbase();
-            stmt = con.prepareCall(sql);
-            stmt.setString(1, zodiac);
-            stmt.setString(2, currentDay);
-            stmt.setString(3, narrative);
-            stmt.setString(4, "Vercel");
-            stmt.registerOutParameter(5, Types.VARCHAR);
-            stmt.execute();
-            response = stmt.getString(5);
-            log.info("Successfully write {} daily horoscope update from Vercel to database", zodiac);
-        } catch (SQLException err) {
-            response = "Fail";
-            log.error("Horoscope service failed with adaptor error {}", String.valueOf(err));
-            try {
-                Spectre.recordError("AS-20008", err.getMessage(), HoroscopeDAO.class.getName());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        } finally {
-            // Close the statement and connection
-            try {
-                if (stmt != null) stmt.close();
-                if (con != null) con.close();
-            } catch (SQLException e) {
-                log.error("Failed closing resources in saveHoroscope", e);
-            }
-            log.info("DB Connection for (saveHoroscope) Closed....");
+        try{
+            log.info("Looking up JNDI DataSource for Oracle DB");
+            InitialContext ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/hats");
+            con = ds.getConnection();
+            log.info("Connection Established successfully");
+        } catch (NamingException | SQLException err) {
+            log.error("JNDI lookup for Oracle DB failed", err);
         }
-        return response;
+        return con;
     }
 }

@@ -3,8 +3,8 @@
  *                                                                            *
  * Author:    eomisore                                                        *
  * File:      AstrologyREST.java                                              *
- * Created:   09/10/2025, 16:47                                               *
- * Modified:  09/10/2025, 16:47                                               *
+ * Created:   27/11/2025, 22:00                                               *
+ * Modified:  27/11/2025, 22:02                                               *
  *                                                                            *
  * Copyright (c)  2025.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,10 +29,11 @@
  *                                                                            *
  ******************************************************************************/
 
-package com.aerosimo.ominet.astrology.api.rest;
+package com.aerosimo.ominet.api;
 
-import com.aerosimo.ominet.astrology.core.models.Spectre;
-import com.aerosimo.ominet.astrology.core.models.Vercel;
+import com.aerosimo.ominet.core.models.Spectre;
+import com.aerosimo.ominet.core.models.Vercel;
+import com.aerosimo.ominet.dao.impl.APIResponseDTO;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -41,40 +42,27 @@ import jakarta.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * REST endpoint to trigger horoscope update from Vercel API.
- */
 @Path("/horoscope")
 @Produces(MediaType.APPLICATION_JSON)
 public class AstrologyREST {
 
     private static final Logger log = LogManager.getLogger(AstrologyREST.class.getName());
 
-    /**
-     * Endpoint to trigger the daily horoscope update process.
-     * Accessible via POST /api/astrology/horoscope
-     */
     @POST
     public Response getHoroscope() {
         try{
             Vercel.updateZodiac();
             log.info("Successfully initiate the process of getting daily horoscope.");
-
-            // Return simple JSON confirmation
-            String jsonResponse = "{\"status\":\"success\",\"message\":\"Daily horoscope update initiated.\"}";
-            return Response.ok(jsonResponse, MediaType.APPLICATION_JSON).build();
+            return Response.ok(new APIResponseDTO("success", "daily horoscope update initiated successfully")).build();
         } catch (Exception err) {
             log.error("❌ Error while updating horoscope: {}", err.getMessage(), err);
             try {
-                Spectre.recordError("TE-20005", "❌ Error while updating horoscope " + err.getMessage(), Vercel.class.getName());
+                Spectre.recordError("TE-10001", "❌ Error while updating horoscope " + err.getMessage(), Vercel.class.getName());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            String errorResponse = String.format(
-                    "{\"status\":\"error\",\"message\":\"%s\"}",
-                    err.getMessage().replace("\"", "'"));
             return Response.serverError()
-                    .entity(errorResponse)
+                    .entity(new APIResponseDTO("unsuccessful", "internal server error"))
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }

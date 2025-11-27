@@ -129,16 +129,6 @@
     <c:set var="baseUrl"
            value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}" />
 
-    <!-- SOAP Endpoint Section -->
-    <h2>🔮 SOAP Web Service</h2>
-    <div class="endpoint-box">
-        <p class="endpoint-title">Astrology SOAP Service (WSDL)</p>
-        <a class="endpoint-url" href="${baseUrl}/ws/astrology?wsdl" target="_blank">
-            ${baseUrl}/ws/astrology?wsdl
-        </a>
-        <p class="text-muted">Use this WSDL in your SOAP client to invoke astrology operations.</p>
-    </div>
-
     <!-- REST Endpoint Section -->
     <h2>🌙 REST API Service</h2>
     <div class="endpoint-box">

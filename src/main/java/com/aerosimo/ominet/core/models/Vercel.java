@@ -3,8 +3,8 @@
  *                                                                            *
  * Author:    eomisore                                                        *
  * File:      Vercel.java                                                     *
- * Created:   09/10/2025, 16:32                                               *
- * Modified:  09/10/2025, 16:32                                               *
+ * Created:   10/10/2025, 03:45                                               *
+ * Modified:  27/11/2025, 22:02                                               *
  *                                                                            *
  * Copyright (c)  2025.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,8 +29,8 @@
  *                                                                            *
  ******************************************************************************/
 
-package com.aerosimo.ominet.astrology.core.models;
-import com.aerosimo.ominet.astrology.dao.mapper.HoroscopeDAO;
+package com.aerosimo.ominet.core.models;
+import com.aerosimo.ominet.dao.mapper.HoroscopeDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;

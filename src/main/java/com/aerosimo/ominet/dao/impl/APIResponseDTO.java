@@ -2,9 +2,9 @@
  * This piece of work is to enhance astrology project functionality.          *
  *                                                                            *
  * Author:    eomisore                                                        *
- * File:      Connect.java                                                    *
- * Created:   09/10/2025, 15:10                                               *
- * Modified:  09/10/2025, 15:10                                               *
+ * File:      APIResponseDTO.java                                             *
+ * Created:   27/11/2025, 22:15                                               *
+ * Modified:  27/11/2025, 22:15                                               *
  *                                                                            *
  * Copyright (c)  2025.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,33 +29,42 @@
  *                                                                            *
  ******************************************************************************/
 
-package com.aerosimo.ominet.astrology.core.config;
+package com.aerosimo.ominet.dao.impl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+public class APIResponseDTO {
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
+    private String status;
+    private String message;
 
-public class Connect {
+    public APIResponseDTO() {
+    }
 
-    private static final Logger log = LogManager.getLogger(Connect.class.getName());
+    public APIResponseDTO(String status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 
-    public static Connection dbase() {
-        log.debug("Fetching a new connection from Oracle DataSource");
-        Connection con = null;
-        try{
-            log.info("Looking up JNDI DataSource for Oracle DB");
-            InitialContext ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/hats");
-            con = ds.getConnection();
-            log.info("Connection Established successfully");
-        } catch (NamingException | SQLException err) {
-            log.error("JNDI lookup for Oracle DB failed", err);
-        }
-        return con;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "APIResponseDTO{" +
+                "status='" + status + '\'' +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

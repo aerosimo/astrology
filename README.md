@@ -34,7 +34,7 @@ Any reliance you place on such information is therefore strictly at your own ris
 
 ---
 
-![Project Cover](/src/main/webapp/assets/img/cover.jpg "Astrology")
+![Project Cover](/src/main/webapp/assets/img/cover.webp "Astrology")
 # Astrology
 > *Astrology is a range of divinatory practices, recognized as pseudo-scientific since the 18th century,
 that propose that information about human affairs and terrestrial events may be discerned by studying the
@@ -45,10 +45,6 @@ apparent positions of celestial objects.*
 ## Project Structure
 
 This `README.md` gives an overview of the project structure and instructions on how to build and deploy the application.
-
-## Features
-
-**SOAP Web Service**: Exposes a `getHoroscope()` method to retrieve daily horoscope and store it in the database.
 
 ## Getting Started
 
@@ -67,7 +63,6 @@ This `README.md` gives an overview of the project structure and instructions on 
 The required dependencies are defined in `pom.xml`. Below are the key dependencies:
 
 - **Jakarta EE 10 API**: Provides JAX-WS support.
-- **JAX-WS**: For SOAP web service implementation.
 - **JAX-RS**: For REST web service implementation.
 
 ### Building and Running the Application
@@ -95,28 +90,14 @@ The required dependencies are defined in `pom.xml`. Below are the key dependenci
 
    Start server and access the application:
 
-    - SOAP Service: WSDL at `http://localhost:8081/astrology/ws/horoscope?wsdl`
-    - REST Service: http://localhost:8081/astrology/api/horoscope
-    - Web Interface: `http://localhost:8081/astrology/index.jsp`
+    - REST Service: http://localhost:8080/astrology/api/horoscope
+    - Web Interface: `http://localhost:8080/astrology/index.jsp`
 
 ## Detailed Explanation of Components
 
-### 1. **SOAP Web Service** (JAX-WS)
+###  **REST Web Service** (JAX-RS)
 
-The SOAP web service is implemented in `com.aerosimo.ominet.astrology.api.soap.AstrologySOAP.java`.
-
-Example dailyHoroscope SOAP Request:
-```xml
-<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ast="https://aerosimo.com/api/ws/astrology">
-   <soap:Header/>
-   <soap:Body>
-      <ast:dailyHoroscope/>
-   </soap:Body>
-</soap:Envelope>
-```
-### 2. **REST Web Service** (JAX-RS)
-
-The REST web service is implemented in `com.aerosimo.ominet.astrology.api.rest.AstrologyREST.java`.
+The REST web service is implemented in `com.aerosimo.ominet.api.AstrologyREST.java`.
 
 Example horoscope REST Request:
 ```curl

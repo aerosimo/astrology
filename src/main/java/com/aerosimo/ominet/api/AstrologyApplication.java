@@ -2,9 +2,9 @@
  * This piece of work is to enhance astrology project functionality.          *
  *                                                                            *
  * Author:    eomisore                                                        *
- * File:      AstrologySOAP.java                                              *
- * Created:   09/10/2025, 16:37                                               *
- * Modified:  09/10/2025, 16:37                                               *
+ * File:      AstrologyApplication.java                                       *
+ * Created:   27/11/2025, 22:01                                               *
+ * Modified:  27/11/2025, 22:02                                               *
  *                                                                            *
  * Copyright (c)  2025.  Aerosimo Ltd                                         *
  *                                                                            *
@@ -29,29 +29,12 @@
  *                                                                            *
  ******************************************************************************/
 
-package com.aerosimo.ominet.astrology.api.soap;
+package com.aerosimo.ominet.api;
 
-import com.aerosimo.ominet.astrology.core.models.Vercel;
-import jakarta.jws.WebMethod;
-import jakarta.jws.WebService;
-import jakarta.xml.ws.BindingType;
-import jakarta.xml.ws.soap.SOAPBinding;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
-@WebService(
-        name = "AstrologyService",
-        serviceName = "AstrologyService",
-        portName = "AstrologyPort",
-        targetNamespace = "https://aerosimo.com/ws")
-@BindingType(SOAPBinding.SOAP12HTTP_BINDING)
-public class AstrologySOAP {
-
-    private static final Logger log = LogManager.getLogger(AstrologySOAP.class.getName());
-
-    @WebMethod(operationName = "dailyHoroscope")
-    public void getHoroscope() {
-        Vercel.updateZodiac();
-        log.info("Successfully initiate the process of getting daily horoscope.");
-    }
+@ApplicationPath("/api")
+public class AstrologyApplication extends Application {
+    // Auto-scans classes annotated with @Path
 }
