@@ -52,6 +52,21 @@ This `README.md` gives an overview of the project structure and instructions on 
 
 ---
 
+## ?? Project Badges & Tech Stack
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-25%2B-orange?logo=java&logoColor=white" alt="Java">
+  <img src="https://img.shields.io/badge/Jakarta%20EE-10-blue?logo=jakartaee&logoColor=white" alt="Jakarta EE 10">
+  <img src="https://img.shields.io/badge/Apache%20TomEE-10.1.44-critical?logo=apachetomcat&logoColor=white" alt="Apache TomEE">
+  <img src="https://img.shields.io/badge/Oracle%20Database-19c-red?logo=oracle&logoColor=white" alt="Oracle 19c">
+  <img src="https://img.shields.io/badge/Maven-3.9%2B-C71A36?logo=apachemaven&logoColor=white" alt="Maven">
+  <img src="https://img.shields.io/badge/REST%20API-JAX--RS-green?logo=rest&logoColor=white" alt="JAX-RS">
+  <img src="https://img.shields.io/badge/Frontend-JSP%20%2F%20FetchAPI-purple?logo=html5&logoColor=white" alt="JSP + Fetch API">
+  <img src="https://img.shields.io/badge/Logging-Log4j-yellow?logo=apache&logoColor=white" alt="Log4j">
+</p>
+
+---
+
 ### Prerequisites
 
 >- **Apache TomEE 10**: is the application server used during development, but any Jakarta EE 10-compliant server should work.
@@ -94,6 +109,7 @@ The required dependencies are defined in `pom.xml`. Below are the key dependenci
     - Web Interface: `http://localhost:8080/astrology/index.jsp`
 
 ![Project Cover](/src/main/webapp/assets/img/coding.jpg "Coding")
+
 
 ## Detailed Explanation of Components
 
