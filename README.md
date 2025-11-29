@@ -93,6 +93,8 @@ The required dependencies are defined in `pom.xml`. Below are the key dependenci
     - REST Service: http://localhost:8080/astrology/api/horoscope
     - Web Interface: `http://localhost:8080/astrology/index.jsp`
 
+![Project Cover](/src/main/webapp/assets/img/coding.jpg "Coding")
+
 ## Detailed Explanation of Components
 
 ###  **REST Web Service** (JAX-RS)
