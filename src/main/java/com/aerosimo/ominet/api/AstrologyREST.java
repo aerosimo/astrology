@@ -34,22 +34,23 @@ package com.aerosimo.ominet.api;
 import com.aerosimo.ominet.core.models.Spectre;
 import com.aerosimo.ominet.core.models.Vercel;
 import com.aerosimo.ominet.dao.impl.APIResponseDTO;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import com.aerosimo.ominet.dao.impl.HoroscopeResponseDTO;
+import com.aerosimo.ominet.dao.mapper.HoroscopeDAO;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Path("/horoscope")
-@Produces(MediaType.APPLICATION_JSON)
 public class AstrologyREST {
 
     private static final Logger log = LogManager.getLogger(AstrologyREST.class.getName());
 
     @POST
-    public Response getHoroscope() {
+    @Path("/overhaul")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response saveHoroscope() {
         try{
             Vercel.updateZodiac();
             log.info("Successfully initiate the process of getting daily horoscope.");
@@ -57,7 +58,7 @@ public class AstrologyREST {
         } catch (Exception err) {
             log.error("❌ Error while updating horoscope: {}", err.getMessage(), err);
             try {
-                Spectre.recordError("TE-10001", "❌ Error while updating horoscope " + err.getMessage(), Vercel.class.getName());
+                Spectre.recordError("TE-20001", "❌ Error while updating horoscope " + err.getMessage(), Vercel.class.getName());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -66,5 +67,26 @@ public class AstrologyREST {
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         }
+    }
+
+    @GET
+    @Path("/sign")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getHoroscope(@QueryParam("value") String sign) {
+        if (sign == null || sign.isBlank()) {
+            log.error("Missing required 'value' query parameter");
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new APIResponseDTO("unsuccessful", "missing required fields"))
+                    .build();
+        }
+
+        HoroscopeResponseDTO resp = HoroscopeDAO.getHoroscope(sign);
+        if (resp == null || resp.getZodiacSign() == null) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new APIResponseDTO("unsuccessful", "no horoscope found"))
+                    .build();
+        }
+
+        return Response.ok(resp).build();
     }
 }

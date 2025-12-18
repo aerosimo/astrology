@@ -33,27 +33,23 @@ package com.aerosimo.ominet.dao.mapper;
 
 import com.aerosimo.ominet.core.config.Connect;
 import com.aerosimo.ominet.core.models.Spectre;
+import com.aerosimo.ominet.dao.impl.HoroscopeResponseDTO;
+import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 
 public class HoroscopeDAO {
 
     private static final Logger log = LogManager.getLogger(HoroscopeDAO.class.getName());
 
     public static String saveHoroscope(String zodiac, String currentDay, String narrative) {
-        log.info("Preparing to save new daily horoscope...");
+        log.info("Preparing to save new daily horoscope from Vercel to database");
         String response;
         String sql = "{call starcast_pkg.saveHoroscope(?,?,?,?,?)}";
-        Connection con = null;
-        CallableStatement stmt = null;
-        try {
-            con = Connect.dbase();
-            stmt = con.prepareCall(sql);
+        try (Connection con = Connect.dbase();
+             CallableStatement stmt = con.prepareCall(sql)) {
             stmt.setString(1, zodiac);
             stmt.setString(2, currentDay);
             stmt.setString(3, narrative);
@@ -61,24 +57,49 @@ public class HoroscopeDAO {
             stmt.registerOutParameter(5, Types.VARCHAR);
             stmt.execute();
             response = stmt.getString(5);
-            log.info("Successfully write {} daily horoscope update from Vercel to database", zodiac);
+            if(response.equalsIgnoreCase("success")){
+                log.info("Successfully write {} daily horoscope update from Vercel to database", zodiac);
+                return response;
+            } else {
+                log.error("Fail to save {} daily horoscope update from Vercel to database", zodiac);
+                return response;
+            }
         } catch (SQLException err) {
-            response = "Fail";
-            log.error("Horoscope service failed with adaptor error {}", String.valueOf(err));
+            log.error("Error in starcast_pkg (SAVE HOROSCOPE)", err);
             try {
-                Spectre.recordError("TE-20001", err.getMessage(), HoroscopeDAO.class.getName());
+                Spectre.recordError("TE-20001", "Error in starcast_pkg (SAVE HOROSCOPE): " + err.getMessage(), HoroscopeDAO.class.getName());
+                response = "internal server error";
+                return response;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        } finally {
-            // Close the statement and connection
-            try {
-                if (stmt != null) stmt.close();
-                if (con != null) con.close();
-            } catch (SQLException e) {
-                log.error("Failed closing resources in saveHoroscope", e);
+        }
+    }
+
+    public static HoroscopeResponseDTO getHoroscope(String zodiac) {
+        log.info("Preparing to retrieve horoscope details");
+        HoroscopeResponseDTO response = null;
+        String sql = "{call starcast_pkg.getHoroscope(?,?)}";
+        try (Connection con = Connect.dbase();
+             CallableStatement stmt = con.prepareCall(sql)) {
+            stmt.setString(1, zodiac);
+            stmt.registerOutParameter(2, OracleTypes.CURSOR);
+            stmt.execute();
+            try (ResultSet rs = (ResultSet) stmt.getObject(2)) {
+                if (rs != null && rs.next()) {
+                    response = new HoroscopeResponseDTO();
+                    response.setZodiacSign(rs.getString("zodiacSign"));
+                    response.setCurrentDay(rs.getString("currentDay"));
+                    response.setNarrative(rs.getString("narrative"));
+                    response.setModifiedBy(rs.getString("modifiedBy"));
+                    response.setModifiedDate(rs.getString("modifiedDate"));
+                }
             }
-            log.info("DB Connection for (saveHoroscope) Closed....");
+        } catch (SQLException err) {
+            log.error("Error in starcast_pkg (GET HOROSCOPE)", err);
+            try {
+                Spectre.recordError("TE-20001", err.getMessage(), HoroscopeDAO.class.getName());
+            } catch (Exception ignored) {}
         }
         return response;
     }
