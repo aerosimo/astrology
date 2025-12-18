@@ -35,6 +35,7 @@ import com.aerosimo.ominet.core.config.Connect;
 import com.aerosimo.ominet.core.models.Spectre;
 import com.aerosimo.ominet.dao.impl.HoroscopeResponseDTO;
 import oracle.jdbc.OracleTypes;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -76,10 +77,11 @@ public class HoroscopeDAO {
         }
     }
 
-    public static HoroscopeResponseDTO getHoroscope(String zodiac) {
+    public static HoroscopeResponseDTO getHoroscope(String sign) {
         log.info("Preparing to retrieve horoscope details");
         HoroscopeResponseDTO response = null;
         String sql = "{call starcast_pkg.getHoroscope(?,?)}";
+        String zodiac = StringUtils.capitalize(sign.toLowerCase());
         try (Connection con = Connect.dbase();
              CallableStatement stmt = con.prepareCall(sql)) {
             stmt.setString(1, zodiac);
