@@ -31,6 +31,7 @@
 
 package com.aerosimo.ominet.core.models;
 
+import com.aerosimo.ominet.dao.impl.APIResponseDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +51,7 @@ public class Spectre {
     private static final String BASE_URL = "https://ominet.aerosimo.com:9443/spectre/api/errors";
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static SpectreResponse recordError(String faultCode, String faultMessage, String faultService) throws Exception {
+    public static APIResponseDTO recordError(String faultCode, String faultMessage, String faultService) throws Exception {
         String endpoint = BASE_URL + "/stow";
         String payload = mapper.writeValueAsString(Map.of(
                 "faultCode", faultCode,
@@ -82,22 +83,6 @@ public class Spectre {
         String respStatus = responseMap.getOrDefault("status", "unknown").toString();
         String respMessage = responseMap.getOrDefault("message", "no message").toString();
 
-        return new SpectreResponse(respStatus, respMessage);
-    }
-    public static class SpectreResponse {
-        private String status;
-        private String message;
-
-        public SpectreResponse(String status, String message) {
-            this.status = status;
-            this.message = message;
-        }
-        public String getStatus() { return status; }
-        public String getMessage() { return message; }
-
-        @Override
-        public String toString() {
-            return "SpectreResponse{status='" + status + "', message='" + message + "'}";
-        }
+        return new APIResponseDTO(respStatus, respMessage);
     }
 }
