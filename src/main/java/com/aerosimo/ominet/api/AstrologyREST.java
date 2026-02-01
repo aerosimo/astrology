@@ -31,8 +31,8 @@
 
 package com.aerosimo.ominet.api;
 
-import com.aerosimo.ominet.core.models.Spectre;
-import com.aerosimo.ominet.core.models.Vercel;
+import com.aerosimo.ominet.core.model.Spectre;
+import com.aerosimo.ominet.core.model.Vercel;
 import com.aerosimo.ominet.dao.impl.APIResponseDTO;
 import com.aerosimo.ominet.dao.impl.HoroscopeResponseDTO;
 import com.aerosimo.ominet.dao.mapper.HoroscopeDAO;

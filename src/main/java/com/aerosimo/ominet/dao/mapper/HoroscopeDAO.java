@@ -32,7 +32,7 @@
 package com.aerosimo.ominet.dao.mapper;
 
 import com.aerosimo.ominet.core.config.Connect;
-import com.aerosimo.ominet.core.models.Spectre;
+import com.aerosimo.ominet.core.model.Spectre;
 import com.aerosimo.ominet.dao.impl.HoroscopeResponseDTO;
 import oracle.jdbc.OracleTypes;
 import org.apache.commons.lang3.StringUtils;
