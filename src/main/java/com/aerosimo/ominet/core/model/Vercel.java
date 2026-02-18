@@ -58,12 +58,14 @@ public class Vercel {
                 "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"};
         for (String sign : signs) {
             apiUrl = "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=" + sign + "&day=TODAY";
+            log.info("API URL: " + apiUrl);
             try {
                 url = new URL(apiUrl);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Accept", "application/json");
                 int responseCode = conn.getResponseCode();
+                log.info("Response Code from Vercel is : " + responseCode);
                 if (responseCode == HttpURLConnection.HTTP_OK) { // 200
                     br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     response = new StringBuilder();
@@ -72,6 +74,7 @@ public class Vercel {
                         response.append(line);
                     }
                     br.close();
+                    log.info(response.toString());
                     // Parse JSON response
                     zodiac = new JSONObject(response.toString());
                     data = zodiac.getJSONObject("data");
@@ -84,7 +87,7 @@ public class Vercel {
                 } else {
                     log.error("Failed to fetch data for {}. HTTP Code: {}", sign, responseCode);
                     try {
-                        Spectre.recordError("TE-20001", "Failed to fetch data for " + sign + "HTTP Code: " + responseCode, Vercel.class.getName());
+                        Spectre.recordError("TE-20001", "Failed to fetch data for " + sign + " HTTP Code: " + responseCode, Vercel.class.getName());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
