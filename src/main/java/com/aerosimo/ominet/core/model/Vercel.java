@@ -57,7 +57,7 @@ public class Vercel {
         signs = new String[]{"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
                 "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"};
         for (String sign : signs) {
-            apiUrl = "https://horoscope-app-api.vercel.app/api/v1/get-horoscope/daily?sign=" + sign + "&day=TODAY";
+            apiUrl = "https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign=" + sign;
             log.info("API URL: " + apiUrl);
             try {
                 url = new URL(apiUrl);
