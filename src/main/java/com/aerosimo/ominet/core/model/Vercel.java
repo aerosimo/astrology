@@ -43,32 +43,23 @@ import java.net.URL;
 public class Vercel {
 
     private static final Logger log = LogManager.getLogger(Vercel.class.getName());
-    static String[] signs;
-    static String apiUrl;
-    static String currentDay;
-    static String narrative;
-    static URL url;
-    static HttpURLConnection conn;
-    static BufferedReader br;
-    static JSONObject zodiac, data;
-    static StringBuilder response;
 
     public static void updateZodiac() {
-        signs = new String[]{"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+        String[] signs = new String[]{"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
                 "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"};
         for (String sign : signs) {
-            apiUrl = "https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign=" + sign;
+            String apiUrl = "https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign=" + sign;
             log.info("API URL: " + apiUrl);
             try {
-                url = new URL(apiUrl);
-                conn = (HttpURLConnection) url.openConnection();
+                URL url = new URL(apiUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Accept", "application/json");
                 int responseCode = conn.getResponseCode();
                 log.info("Response Code from Vercel is : " + responseCode);
                 if (responseCode == HttpURLConnection.HTTP_OK) { // 200
-                    br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    response = new StringBuilder();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
                     String line;
                     while ((line = br.readLine()) != null) {
                         response.append(line);
@@ -76,11 +67,10 @@ public class Vercel {
                     br.close();
                     log.info(response.toString());
                     // Parse JSON response
-                    zodiac = new JSONObject(response.toString());
-                    data = zodiac.getJSONObject("data");
+                    JSONObject zodiac = new JSONObject(response.toString());
                     // Extract elements
-                    currentDay = data.getString("date");
-                    narrative = data.getString("horoscope_data");
+                    String currentDay = zodiac.getString("date");
+                    String narrative = zodiac.getString("horoscope");
                     // Call Horoscope class to insert into DB
                     HoroscopeDAO.saveHoroscope(sign, currentDay, narrative);
                     log.info("Successfully updated horoscope for {}. Today: {}", sign, currentDay);
