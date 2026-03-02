@@ -68,9 +68,10 @@ public class Vercel {
                     log.info(response.toString());
                     // Parse JSON response
                     JSONObject zodiac = new JSONObject(response.toString());
+                    JSONObject zodiacData = zodiac.getJSONObject("data");
                     // Extract elements
-                    String currentDay = zodiac.getString("date");
-                    String narrative = zodiac.getString("horoscope");
+                    String currentDay = zodiacData.getString("date");
+                    String narrative = zodiacData.getString("horoscope");
                     // Call Horoscope class to insert into DB
                     HoroscopeDAO.saveHoroscope(sign, currentDay, narrative);
                     log.info("Successfully updated horoscope for {}. Today: {}", sign, currentDay);
