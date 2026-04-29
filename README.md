@@ -3,7 +3,7 @@
 <details>
   <summary>License</summary>
 
-**MIT License © 2025 Aerosimo**
+**MIT License © 2026 Aerosimo**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy  
 of this software and associated documentation files (the "Software"), to deal  
@@ -52,7 +52,7 @@ This `README.md` gives an overview of the project structure and instructions on 
 
 ---
 
-## ?? Project Badges & Tech Stack
+## Project Badges & Tech Stack
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-25%2B-orange?logo=java&logoColor=white" alt="Java">
