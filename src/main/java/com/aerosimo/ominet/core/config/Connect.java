@@ -34,6 +34,7 @@ package com.aerosimo.ominet.core.config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -57,5 +58,27 @@ public class Connect {
             log.error("JNDI lookup for Oracle DB failed", err);
         }
         return con;
+    }
+
+    public static String tomcatURL() {
+        log.info("Looking up tomcat url");
+        try {
+            Context initCtx = new InitialContext();
+            Context envCtx = (Context) initCtx.lookup("java:comp/env");
+            return (String) envCtx.lookup("url/tomcatURL");
+        } catch (NamingException err) {
+            log.error("JNDI lookup for tomcat url failed", err);
+            return null;
+        }
+    }
+
+    public static String vercelURL() {
+        try {
+            Context envCtx = (Context) new InitialContext().lookup("java:comp/env");
+            return (String) envCtx.lookup("url/vercelURL");
+        } catch (NamingException err) {
+            log.error("JNDI lookup for vercel url failed", err);
+            return null;
+        }
     }
 }

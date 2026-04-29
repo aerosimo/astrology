@@ -30,6 +30,7 @@
  ******************************************************************************/
 
 package com.aerosimo.ominet.core.model;
+import com.aerosimo.ominet.core.config.Connect;
 import com.aerosimo.ominet.dao.mapper.HoroscopeDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,7 +49,7 @@ public class Vercel {
         String[] signs = new String[]{"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
                 "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"};
         for (String sign : signs) {
-            String apiUrl = "https://freehoroscopeapi.com/api/v1/get-horoscope/daily?sign=" + sign;
+            String apiUrl = Connect.vercelURL() + "/api/v1/get-horoscope/daily?sign=" + sign;
             log.info("API URL: " + apiUrl);
             try {
                 URL url = new URL(apiUrl);
